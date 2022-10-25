@@ -10,43 +10,71 @@ datasource db {
   url      = "file:my-database.db"
 }
 
-
 model User {
-  id Int @id @default(autoincrement()) 
-  name String @unique
-  email String @unique
+  id       Int      @id @default(autoincrement())
+  name     String   @unique
+  email    String   @unique
   password String
-  balance Int @default(1000)
-  age Int 
+  balance  Int      @default(1000)
+  age      Int
+  books    Book[]
+  ticket   Ticket[]
 }
 
 model Flight {
-  id Int @id @default(autoincrement()) 
-  departure String
-  destination String
-  departure_time DateTime
-  arrival_time DateTime
-  price Int
-  seats Int
-  airline String @unique
-  aircraft_id Int @unique
-  class String
+  id             Int      @id @default(autoincrement())
+  departure      String
+  destination    String
+  departure_time String
+  arrival_time   String
+  price          Int
+  seats          Int
+  airline        String   @unique
+  aircraft_id    Int      @unique
+  class          String
+  books          Book[]
+  ticket         Ticket[]
 }
 
 model Passanger {
-  id
-  name 
-  age 
-  gender 
-  address
+  id          Int     @id @default(autoincrement())
+  name        String
+  lastname    String
+  age         Int
+  gender      String
+  nationality String?
 
-
-}
-
-model BookedFlights {
-
+  ticket   Ticket @relation(fields: [ticketId], references: [id])
+  ticketId Int
 }
 
 model Book {
-  
+  id     Int @id @default(autoincrement())
+  people Int
+
+  flight   Flight  @relation(fields: [flightId], references: [id])
+  flightId Int
+  ticket   Ticket? @relation(fields: [ticketId], references: [id])
+  ticketId Int?    @unique
+  user     User    @relation(fields: [userId], references: [id])
+  userId   Int
+}
+
+model Ticket {
+  id        Int         @id @default(autoincrement())
+  book      Book?
+  passanger Passanger[]
+
+  user   User? @relation(fields: [userId], references: [id])
+  userId Int?
+
+  flight   Flight? @relation(fields: [flightId], references: [id])
+  flightId Int?
+}
+
+model Hotel {
+  id                  Int    @id @default(autoincrement())
+  name                String
+  city                String
+  accomodation_number Int
 }
