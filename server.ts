@@ -27,8 +27,10 @@ async function getCurrentUser(token: string) {
   const user = await prisma.user.findUnique({
     //@ts-ignore
     where: { id: data.id },
-    include: {  books: { include: { flight: true } },
-    ticket: { include: { flight: true, passanger: true } }, },
+    include: {
+      books: { include: { flight: true } },
+      ticket: { include: { flight: true, passanger: true } },
+    },
   });
   return user;
 }
